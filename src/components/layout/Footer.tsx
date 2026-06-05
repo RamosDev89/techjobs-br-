@@ -43,8 +43,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-6 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} TechJobs BR. Todos os direitos reservados.
+        <div className="border-t mt-8 pt-6 text-center text-sm text-muted-foreground space-y-1">
+          <p>© {new Date().getFullYear()} TechJobs BR. Todos os direitos reservados.</p>
+          <p>Desenvolvido por <span className="font-medium text-foreground">Fernando Rafael Ramos</span></p>
         </div>
       </div>
     </footer>
