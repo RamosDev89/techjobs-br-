@@ -45,7 +45,16 @@ export function Footer() {
 
         <div className="border-t mt-8 pt-6 text-center text-sm text-muted-foreground space-y-1">
           <p>© {new Date().getFullYear()} TechJobs BR. Todos os direitos reservados.</p>
-          <p>Desenvolvido por <span className="font-medium text-foreground">Fernando Rafael Ramos</span></p>
+          <p>Desenvolvido por{" "}
+            <a
+              href="https://www.linkedin.com/in/fernandorramos/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Fernando Rafael Ramos
+            </a>
+          </p>
         </div>
       </div>
     </footer>
