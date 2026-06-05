@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm info:*)",
+      "Bash(npm audit:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(npm run:*)",
+      "Bash(curl:*)",
+      "Bash(nc:*)",
+      "Bash(PGPASSWORD='TechJobsBR*123' psql:*)",
+      "Bash(node:*)",
+      "Bash(npx prisma:*)",
+      "Bash(git:*)"
+    ]
+  }
+}

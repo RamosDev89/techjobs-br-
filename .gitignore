@@ -1,0 +1,33 @@
+# deps
+node_modules/
+.pnp
+.pnp.js
+
+# build
+.next/
+out/
+dist/
+build/
+
+# env — NEVER commit real credentials
+.env
+.env.local
+.env.*.local
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# misc
+.DS_Store
+*.pem
+.turbo/
+
+# testing
+playwright-report/
+test-results/
+coverage/
+
+# prisma
+prisma/migrations/dev.db

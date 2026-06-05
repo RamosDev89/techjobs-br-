@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum TamanhoEmpresa {
+  STARTUP
+  PME
+  GRANDE
+  ENTERPRISE
+}
+
+enum Modalidade {
+  PRESENCIAL
+  HIBRIDA
+  REMOTA
+  REMOTA_INTERNACIONAL
+}
+
+enum Nivel {
+  ESTAGIO
+  JUNIOR
+  PLENO
+  SENIOR
+  ESPECIALISTA
+  GERENCIA
+}
+
+enum Cargo {
+  FRONTEND
+  BACKEND
+  FULLSTACK
+  MOBILE
+  DEVOPS
+  DATA
+  QA
+  DESIGN
+  PRODUTO
+  SEGURANCA
+  IA
+  OUTRO
+}
+
+enum TipoContrato {
+  CLT
+  PJ
+  FREELANCE
+  ESTAGIO
+}
+
+enum Moeda {
+  BRL
+  USD
+  EUR
+}
+
+enum StatusCandidatura {
+  ENVIADA
+  VISUALIZADA
+  ENTREVISTA
+  REJEITADA
+  APROVADA
+}
+
+model Empresa {
+  id           String         @id @default(cuid())
+  nome         String
+  slug         String         @unique
+  logo         String?
+  site         String?
+  descricao    String?        @db.Text
+  tamanho      TamanhoEmpresa
+  localizacao  String?
+  verificada   Boolean        @default(false)
+  usuarioId    String?
+  criadaEm     DateTime       @default(now())
+  atualizadaEm DateTime       @updatedAt
+  vagas        Vaga[]
+
+  @@map("empresas")
+}
+
+model Vaga {
+  id            String       @id @default(cuid())
+  titulo        String
+  slug          String       @unique
+  descricao     String       @db.Text
+  empresaId     String
+  empresa       Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  modalidade    Modalidade
+  nivel         Nivel
+  cargo         Cargo
+  tipoContrato  TipoContrato
+  salarioMin    Float?
+  salarioMax    Float?
+  moeda         Moeda        @default(BRL)
+  estado        String?
+  cidade        String?
+  tecnologias   String[]
+  beneficios    String[]
+  ativa         Boolean      @default(true)
+  destacada     Boolean      @default(false)
+  visualizacoes Int          @default(0)
+  expiradaEm    DateTime?
+  fonteExterna  String?
+  nomeFonte     String?
+  hashExterna   String?      @unique
+  publicadaEm   DateTime?
+  criadaEm      DateTime     @default(now())
+  atualizadaEm  DateTime     @updatedAt
+  candidaturas  Candidatura[]
+  favoritos     Favorito[]
+
+  @@index([ativa, criadaEm(sort: Desc)])
+  @@index([cargo])
+  @@index([modalidade])
+  @@index([nivel])
+  @@index([slug])
+  @@index([nomeFonte])
+  @@map("vagas")
+}
+
+model Candidatura {
+  id           String            @id @default(cuid())
+  vagaId       String
+  vaga         Vaga              @relation(fields: [vagaId], references: [id], onDelete: Cascade)
+  candidatoId  String
+  curriculo    String?
+  carta        String?           @db.Text
+  status       StatusCandidatura @default(ENVIADA)
+  criadaEm     DateTime          @default(now())
+  atualizadaEm DateTime          @updatedAt
+
+  @@unique([vagaId, candidatoId])
+  @@map("candidaturas")
+}
+
+model AlertaVaga {
+  id             String    @id @default(cuid())
+  usuarioId      String
+  email          String
+  filtros        Json
+  ativo          Boolean   @default(true)
+  ultimaExecucao DateTime?
+  criadaEm       DateTime  @default(now())
+
+  @@index([ativo])
+  @@map("alertas_vaga")
+}
+
+model Favorito {
+  id        String   @id @default(cuid())
+  usuarioId String
+  vagaId    String
+  vaga      Vaga     @relation(fields: [vagaId], references: [id], onDelete: Cascade)
+  criadaEm  DateTime @default(now())
+
+  @@unique([usuarioId, vagaId])
+  @@map("favoritos")
+}
