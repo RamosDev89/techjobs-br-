@@ -7,7 +7,7 @@ import type { Cargo, Modalidade, Nivel, TipoContrato } from "@prisma/client";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY);
 
 interface AlertaFiltros {
   q?: string;
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       continue;
     }
 
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.EMAIL_FROM!,
       to: alerta.email,
       subject: `${vagas.length} nova${vagas.length > 1 ? "s" : ""} vaga${vagas.length > 1 ? "s" : ""} para você`,
