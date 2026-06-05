@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { supabase } from "@/lib/supabase";
 import { ConfirmacaoCandidaturaEmail } from "@/emails/confirmacao-candidatura";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY);
 
 const createSchema = z.object({
   vagaId: z.string(),
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email (non-blocking)
     if (user.email) {
-      resend.emails.send({
+      getResend().emails.send({
         from: process.env.EMAIL_FROM!,
         to: user.email,
         subject: `Candidatura enviada: ${vaga.titulo}`,
