@@ -42,6 +42,7 @@ function guessCargo(title: string): ScrapedVaga["cargo"] {
 function guessNivel(title: string): ScrapedVaga["nivel"] {
   const t = title.toLowerCase();
   if (t.includes("estágio") || t.includes("estagio") || t.includes("intern")) return "ESTAGIO";
+  if (t.includes("trainee")) return "TRAINEE";
   if (t.includes("júnior") || t.includes("junior") || t.includes("jr")) return "JUNIOR";
   if (t.includes("pleno") || t.includes("mid")) return "PLENO";
   if (t.includes("sênior") || t.includes("senior") || t.includes("sr")) return "SENIOR";
@@ -71,6 +72,8 @@ export async function scrapeGupy(options: ScraperOptions = {}): Promise<ScraperR
     "engenheiro software",
     "programador",
     "developer",
+    "trainee tecnologia",
+    "programa trainee",
     "frontend",
     "backend",
     "fullstack",

@@ -34,6 +34,7 @@ const MODALIDADES = [
 const NIVEIS = [
   { value: "", label: "Todos os níveis" },
   { value: "ESTAGIO", label: "Estágio" },
+  { value: "TRAINEE", label: "Trainee" },
   { value: "JUNIOR", label: "Júnior" },
   { value: "PLENO", label: "Pleno" },
   { value: "SENIOR", label: "Sênior" },
@@ -47,6 +48,7 @@ const CONTRATOS = [
   { value: "PJ", label: "PJ" },
   { value: "FREELANCE", label: "Freelance" },
   { value: "ESTAGIO", label: "Estágio" },
+  { value: "TRAINEE", label: "Trainee" },
 ];
 
 const FONTES = [
