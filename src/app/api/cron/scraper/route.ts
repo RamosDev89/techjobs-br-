@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { runAllScrapers } from "@/scraper";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +22,11 @@ export async function GET(request: NextRequest) {
 
   const duration = Date.now() - start;
   console.log(`[cron/scraper] Done in ${duration}ms. Inserted: ${result.inserted}, Skipped: ${result.skipped}`);
+
+  if (result.inserted > 0) {
+    revalidatePath("/");
+    revalidatePath("/vagas");
+  }
 
   return NextResponse.json({
     ...result,
