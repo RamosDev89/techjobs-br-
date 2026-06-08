@@ -15,7 +15,7 @@ export async function runAllScrapers(): Promise<{
   skipped: number;
   errors: string[];
 }> {
-  const maxPerSource = Number(process.env.SCRAPER_MAX_PER_SOURCE ?? 50);
+  const maxPerSource = Number(process.env.SCRAPER_MAX_PER_SOURCE ?? 200);
 
   const results = await Promise.all([
     limit(() => scrapeGupy({ maxResults: maxPerSource })),
