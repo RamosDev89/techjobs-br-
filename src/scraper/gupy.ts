@@ -62,11 +62,26 @@ function extractTechs(text: string): string[] {
 }
 
 export async function scrapeGupy(options: ScraperOptions = {}): Promise<ScraperResult> {
-  const { maxResults = 50 } = options;
+  const { maxResults = 200 } = options;
   const errors: string[] = [];
   const vagas: ScrapedVaga[] = [];
 
-  const searches = ["desenvolvedor", "engenheiro software", "programador", "developer"];
+  const searches = [
+    "desenvolvedor",
+    "engenheiro software",
+    "programador",
+    "developer",
+    "frontend",
+    "backend",
+    "fullstack",
+    "devops",
+    "data engineer",
+    "mobile",
+    "react",
+    "python",
+    "java",
+    "typescript",
+  ];
 
   try {
     for (const kw of searches) {
