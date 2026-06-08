@@ -73,6 +73,7 @@ const modalidadeLabel: Record<string, string> = {
 
 const nivelLabel: Record<string, string> = {
   ESTAGIO: "Estágio",
+  TRAINEE: "Trainee",
   JUNIOR: "Júnior",
   PLENO: "Pleno",
   SENIOR: "Sênior",
@@ -85,6 +86,7 @@ const contratLabel: Record<string, string> = {
   PJ: "PJ",
   FREELANCE: "Freelance",
   ESTAGIO: "Estágio",
+  TRAINEE: "Trainee",
 };
 
 const EMPLOYMENT_TYPE_MAP: Record<string, string> = {
@@ -92,6 +94,7 @@ const EMPLOYMENT_TYPE_MAP: Record<string, string> = {
   PJ: "CONTRACTOR",
   FREELANCE: "TEMPORARY",
   ESTAGIO: "INTERN",
+  TRAINEE: "INTERN",
 };
 
 function buildJobPostingSchema(vaga: NonNullable<Awaited<ReturnType<typeof getVaga>>>) {

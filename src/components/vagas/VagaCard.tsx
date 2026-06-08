@@ -22,6 +22,7 @@ const modalidadeLabel: Record<string, string> = {
 
 const nivelLabel: Record<string, string> = {
   ESTAGIO: "Estágio",
+  TRAINEE: "Trainee",
   JUNIOR: "Júnior",
   PLENO: "Pleno",
   SENIOR: "Sênior",

@@ -24,6 +24,7 @@ enum Modalidade {
 
 enum Nivel {
   ESTAGIO
+  TRAINEE
   JUNIOR
   PLENO
   SENIOR
@@ -51,6 +52,7 @@ enum TipoContrato {
   PJ
   FREELANCE
   ESTAGIO
+  TRAINEE
 }
 
 enum Moeda {
