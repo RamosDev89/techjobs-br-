@@ -11,7 +11,16 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Vagas de Tecnologia",
-  description: "Busque vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais.",
+  description:
+    "Busque vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais. Filtre por cargo, modalidade, nível, contrato e salário.",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br"}/vagas`,
+  },
+  openGraph: {
+    title: "Vagas de Tecnologia no Brasil | TechJobs BR",
+    description:
+      "Busque vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais.",
+  },
 };
 
 interface PageProps {

@@ -10,18 +10,62 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(APP_URL),
   title: {
     default: "TechJobs BR — Vagas de tecnologia no Brasil",
     template: "%s | TechJobs BR",
   },
   description:
     "Encontre as melhores vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais. Vagas de Gupy, Indeed, Programathor e GeekHunter em um só lugar.",
-  keywords: ["vagas", "tecnologia", "brasil", "programador", "desenvolvedor", "emprego tech"],
+  keywords: [
+    "vagas tecnologia brasil",
+    "emprego programador",
+    "vaga desenvolvedor",
+    "frontend",
+    "backend",
+    "fullstack",
+    "mobile",
+    "devops",
+    "remoto",
+    "tech jobs brasil",
+    "gupy",
+    "programathor",
+    "geekhunter",
+  ],
+  authors: [{ name: "TechJobs BR" }],
+  creator: "TechJobs BR",
   openGraph: {
     type: "website",
     locale: "pt_BR",
+    url: APP_URL,
     siteName: "TechJobs BR",
+    title: "TechJobs BR — Vagas de tecnologia no Brasil",
+    description:
+      "Encontre as melhores vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TechJobs BR — Vagas de tecnologia no Brasil",
+    description:
+      "Encontre as melhores vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais.",
+    site: "@techjobsbr",
+  },
+  alternates: {
+    canonical: APP_URL,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
