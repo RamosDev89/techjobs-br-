@@ -32,17 +32,34 @@ async function getVaga(slug: string) {
   });
 }
 
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const vaga = await getVaga(slug);
   if (!vaga) return { title: "Vaga não encontrada" };
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
+  const url = `${baseUrl}/vagas/${slug}`;
+  const description = stripHtml(vaga.descricao).slice(0, 160);
+  const title = `${vaga.titulo} — ${vaga.empresa.nome}`;
+
   return {
-    title: `${vaga.titulo} — ${vaga.empresa.nome}`,
-    description: vaga.descricao.slice(0, 160),
+    title,
+    description,
+    alternates: { canonical: url },
     openGraph: {
-      title: `${vaga.titulo} — ${vaga.empresa.nome}`,
-      description: vaga.descricao.slice(0, 160),
+      title,
+      description,
+      url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
     },
   };
 }
@@ -70,6 +87,69 @@ const contratLabel: Record<string, string> = {
   ESTAGIO: "Estágio",
 };
 
+const EMPLOYMENT_TYPE_MAP: Record<string, string> = {
+  CLT: "FULL_TIME",
+  PJ: "CONTRACTOR",
+  FREELANCE: "TEMPORARY",
+  ESTAGIO: "INTERN",
+};
+
+function buildJobPostingSchema(vaga: NonNullable<Awaited<ReturnType<typeof getVaga>>>) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
+  const isRemote = vaga.modalidade === "REMOTA" || vaga.modalidade === "REMOTA_INTERNACIONAL";
+
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: vaga.titulo,
+    description: vaga.descricao,
+    datePosted: (vaga.publicadaEm ?? vaga.criadaEm).toISOString(),
+    validThrough: new Date(
+      (vaga.publicadaEm ?? vaga.criadaEm).getTime() + 90 * 24 * 60 * 60 * 1000
+    ).toISOString(),
+    employmentType: EMPLOYMENT_TYPE_MAP[vaga.tipoContrato] ?? "OTHER",
+    hiringOrganization: {
+      "@type": "Organization",
+      name: vaga.empresa.nome,
+      ...(vaga.empresa.site && { sameAs: vaga.empresa.site }),
+      ...(vaga.empresa.logo && { logo: vaga.empresa.logo }),
+    },
+    url: `${baseUrl}/vagas/${vaga.slug}`,
+    ...(isRemote
+      ? {
+          jobLocationType: "TELECOMMUTE",
+          applicantLocationRequirements: { "@type": "Country", name: "Brazil" },
+        }
+      : {
+          jobLocation: {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: vaga.cidade ?? undefined,
+              addressRegion: vaga.estado ?? undefined,
+              addressCountry: "BR",
+            },
+          },
+        }),
+    ...(vaga.salarioMin || vaga.salarioMax
+      ? {
+          baseSalary: {
+            "@type": "MonetaryAmount",
+            currency: vaga.moeda ?? "BRL",
+            value: {
+              "@type": "QuantitativeValue",
+              ...(vaga.salarioMin && { minValue: vaga.salarioMin }),
+              ...(vaga.salarioMax && { maxValue: vaga.salarioMax }),
+              unitText: "MONTH",
+            },
+          },
+        }
+      : {}),
+  };
+
+  return schema;
+}
+
 export default async function VagaPage({ params }: Props) {
   const { slug } = await params;
   const vaga = await getVaga(slug);
@@ -82,9 +162,14 @@ export default async function VagaPage({ params }: Props) {
 
   const salario = formatSalary(vaga.salarioMin, vaga.salarioMax, vaga.moeda);
   const localidade = [vaga.cidade, vaga.estado].filter(Boolean).join(", ");
+  const jobPostingSchema = buildJobPostingSchema(vaga);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingSchema) }}
+      />
       <div className="mb-6">
         <Link
           href="/vagas"

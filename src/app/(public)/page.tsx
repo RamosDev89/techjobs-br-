@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Search, Zap, Globe, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,29 @@ import { VagaCard } from "@/components/vagas/VagaCard";
 import type { VagaComEmpresa } from "@/types";
 
 export const revalidate = 1800; // 30 min
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
+
+export const metadata: Metadata = {
+  alternates: { canonical: APP_URL },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "TechJobs BR",
+  url: APP_URL,
+  description:
+    "Encontre as melhores vagas de tecnologia no Brasil. Frontend, Backend, Fullstack, Mobile, DevOps e mais.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${APP_URL}/vagas?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
 
 async function getStats() {
   const [totalVagas, totalEmpresas, totalRemoto] = await Promise.all([
@@ -70,6 +94,10 @@ export default async function HomePage() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
       {/* Hero */}
       <section className="bg-gradient-to-b from-primary/5 to-background border-b py-16 md:py-24">
         <div className="container mx-auto px-4 text-center">
