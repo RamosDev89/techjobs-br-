@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { VagaCard } from "@/components/vagas/VagaCard";
 import type { VagaComEmpresa } from "@/types";
 
-export const revalidate = 1800; // 30 min
+export const revalidate = 300; // 5 min
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
 
