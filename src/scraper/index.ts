@@ -9,7 +9,7 @@ import { scrapeRemoteOK } from "./remoteok";
 import { scrapeTrampos } from "./trampos";
 import { scrapeVagasCom } from "./vagascom";
 import { scrapeInfoJobs } from "./infojobs";
-import { vagaHash } from "@/lib/hash";
+import { vagaHash, cleanTitulo } from "@/lib/hash";
 import { slugify } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import type { ScrapedVaga } from "@/types";
@@ -44,6 +44,7 @@ export async function runAllScrapers(): Promise<{
   let skipped = 0;
 
   for (const scraped of allVagas) {
+    scraped.titulo = cleanTitulo(scraped.titulo);
     const hash = vagaHash(scraped.titulo, scraped.empresaNome, scraped.nomeFonte);
 
     const exists = await prisma.vaga.findUnique({ where: { hashExterna: hash } });

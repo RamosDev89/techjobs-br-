@@ -54,9 +54,15 @@ const CONTRATOS = [
 const FONTES = [
   { value: "", label: "Todas as fontes" },
   { value: "Gupy", label: "Gupy" },
-  { value: "Indeed", label: "Indeed" },
   { value: "Programathor", label: "Programathor" },
   { value: "GeekHunter", label: "GeekHunter" },
+  { value: "Remotive", label: "Remotive" },
+  { value: "Greenhouse", label: "Greenhouse" },
+  { value: "Lever", label: "Lever" },
+  { value: "RemoteOK", label: "RemoteOK" },
+  { value: "Trampos", label: "Trampos" },
+  { value: "Vagas.com.br", label: "Vagas.com.br" },
+  { value: "InfoJobs", label: "InfoJobs" },
 ];
 
 export function VagaFiltros() {
