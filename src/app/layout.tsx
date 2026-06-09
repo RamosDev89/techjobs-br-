@@ -5,11 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-export const metadata = {
-  verification: {
-    google: 'SEU_CODIGO_AQUI',
-  },
-}
 
 const inter = Inter({
   subsets: ["latin"],
