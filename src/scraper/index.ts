@@ -6,6 +6,9 @@ import { scrapeRemotive } from "./remotive";
 import { scrapeGreenhouse } from "./greenhouse";
 import { scrapeLever } from "./lever";
 import { scrapeRemoteOK } from "./remoteok";
+import { scrapeTrampos } from "./trampos";
+import { scrapeVagasCom } from "./vagascom";
+import { scrapeInfoJobs } from "./infojobs";
 import { vagaHash } from "@/lib/hash";
 import { slugify } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
@@ -29,6 +32,9 @@ export async function runAllScrapers(): Promise<{
     limit(() => scrapeGreenhouse({ maxResults: maxPerSource })),
     limit(() => scrapeLever({ maxResults: maxPerSource })),
     limit(() => scrapeRemoteOK({ maxResults: maxPerSource })),
+    limit(() => scrapeTrampos({ maxResults: maxPerSource })),
+    limit(() => scrapeVagasCom({ maxResults: maxPerSource })),
+    limit(() => scrapeInfoJobs({ maxResults: maxPerSource })),
   ]);
 
   const allErrors: string[] = results.flatMap((r) => r.errors);
