@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { supabase } from "@/lib/supabase";
+import { createRouteClient } from "@/lib/supabase";
 
 const createAlertaSchema = z.object({
   filtros: z.object({
@@ -15,7 +15,7 @@ const createAlertaSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await createRouteClient(request).auth.getUser();
   if (!user || !user.email) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
   }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(_request: NextRequest) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await createRouteClient(_request).auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
   }
@@ -52,7 +52,7 @@ export async function GET(_request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await createRouteClient(request).auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
   }

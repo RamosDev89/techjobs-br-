@@ -136,12 +136,17 @@ export default function DashboardPage() {
             <p className="text-sm text-muted-foreground mb-4">
               Configure alertas e receba vagas por email a cada 6 horas.
             </p>
-            <Button size="sm" asChild>
-              <Link href="/vagas">
-                <Plus className="h-4 w-4" />
-                Criar alerta
-              </Link>
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/dashboard/alertas">Ver alertas</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/dashboard/alertas">
+                  <Plus className="h-4 w-4" />
+                  Criar alerta
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
 

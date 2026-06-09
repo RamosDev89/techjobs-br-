@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
-import { supabase } from "@/lib/supabase";
+import { createRouteClient } from "@/lib/supabase";
 import { ConfirmacaoCandidaturaEmail } from "@/emails/confirmacao-candidatura";
 
 const getResend = () => new Resend(process.env.RESEND_API_KEY);
@@ -14,7 +14,7 @@ const createSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await createRouteClient(request).auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
   }
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await createRouteClient(request).auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
   }
