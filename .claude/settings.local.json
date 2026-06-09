@@ -12,7 +12,14 @@
       "Bash(PGPASSWORD='TechJobsBR*123' psql:*)",
       "Bash(node:*)",
       "Bash(npx prisma:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(/Users/drfernandoramos/Documents/Ramos-Dev/tech-jobs/vercel.json:*)",
+      "Bash(PRISMA_FORCE_INTERACTIVE=1 npx prisma:*)",
+      "WebFetch(domain:remoteok.com)",
+      "WebFetch(domain:remotar.com.br)",
+      "WebFetch(domain:crowd.br.com)",
+      "Bash(vercel:*)",
+      "Bash(SCRAPER_ENABLED=true npx tsx:*)"
     ]
   }
 }

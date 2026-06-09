@@ -1,35 +1,51 @@
-import type { MetadataRoute } from "next";
-import { prisma } from "@/lib/prisma";
+import { MetadataRoute } from 'next'
+import { prisma } from '@/lib/prisma'
+
+const BASE_URL = 'https://techjobs-br.vercel.app/' // ajuste para seu domínio real
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
-
-  const vagas = await prisma.vaga.findMany({
-    where: { ativa: true },
-    select: { slug: true, criadaEm: true, publicadaEm: true },
-    orderBy: { criadaEm: "desc" },
-  });
-
-  const vagaUrls: MetadataRoute.Sitemap = vagas.map((v) => ({
-    url: `${baseUrl}/vagas/${v.slug}`,
-    lastModified: v.publicadaEm ?? v.criadaEm,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
-
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: BASE_URL,
       lastModified: new Date(),
-      changeFrequency: "hourly",
-      priority: 1,
+      changeFrequency: 'hourly',
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/vagas`,
+      url: `${BASE_URL}/vagas`,
       lastModified: new Date(),
-      changeFrequency: "hourly",
+      changeFrequency: 'hourly',
       priority: 0.9,
     },
-    ...vagaUrls,
-  ];
+  ]
+
+  try {
+    const vagas = await prisma.vaga.findMany({
+      where: {
+        ativa: true,
+        OR: [
+          { expiradaEm: null },
+          { expiradaEm: { gt: new Date() } },
+        ],
+      },
+      select: {
+        slug: true,
+        atualizadaEm: true,
+      },
+      orderBy: { atualizadaEm: 'desc' },
+      take: 50000,
+    })
+
+    const vagaRoutes: MetadataRoute.Sitemap = vagas.map((vaga) => ({
+      url: `${BASE_URL}/vagas/${vaga.slug}`,
+      lastModified: vaga.atualizadaEm,
+      changeFrequency: 'daily',
+      priority: 0.7,
+    }))
+
+    return [...staticRoutes, ...vagaRoutes]
+  } catch (error) {
+    console.error('Erro ao gerar sitemap:', error)
+    return staticRoutes
+  }
 }
