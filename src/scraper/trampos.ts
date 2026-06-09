@@ -59,7 +59,7 @@ export async function scrapeTrampos(options: ScraperOptions = {}): Promise<Scrap
       let jobs: TramposJob[] = [];
       $("script").each((_, el) => {
         const src = $(el).html() ?? "";
-        const match = src.match(/window\.initialLoad\s*=\s*(\{.+?\});/s);
+        const match = src.match(/window\.initialLoad\s*=\s*(\{[\s\S]+?\});/);
         if (match) {
           try {
             const parsed = JSON.parse(match[1]) as TramposInitialLoad;
