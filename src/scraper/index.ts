@@ -2,12 +2,16 @@ import pLimit from "p-limit";
 import { scrapeGupy } from "./gupy";
 import { scrapeProgramathor } from "./programathor";
 import { scrapeGeekHunter } from "./geekHunter";
+import { scrapeRemotive } from "./remotive";
+import { scrapeGreenhouse } from "./greenhouse";
+import { scrapeLever } from "./lever";
+import { scrapeRemoteOK } from "./remoteok";
 import { vagaHash } from "@/lib/hash";
 import { slugify } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import type { ScrapedVaga } from "@/types";
 
-const limit = pLimit(2); // 2 scrapers concorrentes
+const limit = pLimit(3); // 3 scrapers concorrentes
 
 export async function runAllScrapers(): Promise<{
   total: number;
@@ -21,6 +25,10 @@ export async function runAllScrapers(): Promise<{
     limit(() => scrapeGupy({ maxResults: maxPerSource })),
     limit(() => scrapeProgramathor({ maxResults: maxPerSource })),
     limit(() => scrapeGeekHunter({ maxResults: maxPerSource })),
+    limit(() => scrapeRemotive({ maxResults: maxPerSource })),
+    limit(() => scrapeGreenhouse({ maxResults: maxPerSource })),
+    limit(() => scrapeLever({ maxResults: maxPerSource })),
+    limit(() => scrapeRemoteOK({ maxResults: maxPerSource })),
   ]);
 
   const allErrors: string[] = results.flatMap((r) => r.errors);
