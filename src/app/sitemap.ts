@@ -47,3 +47,4 @@ ${[...staticRoutes, ...vagaRoutes.map(v => ({ ...v, changefreq: 'daily', priorit
     headers: { 'Content-Type': 'application/xml; charset=utf-8' },
   })
 }
+export default GET;
