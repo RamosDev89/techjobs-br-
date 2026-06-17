@@ -11,6 +11,7 @@ import { scrapeVagasCom } from "./vagascom";
 import { scrapeInfoJobs } from "./infojobs";
 import { vagaHash, cleanTitulo } from "@/lib/hash";
 import { slugify } from "@/lib/utils";
+import { classifyTechJob } from "./utils";
 import { prisma } from "@/lib/prisma";
 import type { ScrapedVaga } from "@/types";
 
@@ -20,6 +21,7 @@ export async function runAllScrapers(): Promise<{
   total: number;
   inserted: number;
   skipped: number;
+  filtered: number;
   errors: string[];
 }> {
   const maxPerSource = Number(process.env.SCRAPER_MAX_PER_SOURCE ?? 200);
@@ -42,9 +44,18 @@ export async function runAllScrapers(): Promise<{
 
   let inserted = 0;
   let skipped = 0;
+  let filtered = 0;
 
   for (const scraped of allVagas) {
     scraped.titulo = cleanTitulo(scraped.titulo);
+
+    const cargo = classifyTechJob(scraped.titulo);
+    if (!cargo) {
+      filtered++;
+      continue;
+    }
+    scraped.cargo = cargo;
+
     const hash = vagaHash(scraped.titulo, scraped.empresaNome, scraped.nomeFonte);
 
     const exists = await prisma.vaga.findUnique({ where: { hashExterna: hash } });
@@ -103,6 +114,7 @@ export async function runAllScrapers(): Promise<{
     total: allVagas.length,
     inserted,
     skipped,
+    filtered,
     errors: allErrors,
   };
 }
