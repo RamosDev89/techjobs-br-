@@ -89,8 +89,8 @@ export async function scrapeGupy(options: ScraperOptions = {}): Promise<ScraperR
   try {
     for (const kw of searches) {
       if (vagas.length >= maxResults) break;
-      const url = `https://portal.api.gupy.io/api/job?name=${encodeURIComponent(kw)}&limit=20`;
-      const res = await axios.get<{ data: GupyJob[] }>(url, {
+      const url = `https://employability-portal.gupy.io/api/v1/jobs?term=${encodeURIComponent(kw)}&limit=20`;
+      const res = await axios.get<{ data: GupyJob[]; pagination: { total: number } }>(url, {
         timeout: 15_000,
         headers: { "User-Agent": "TechJobsBR/1.0 (+https://techjobsbr.com.br)" },
       });
