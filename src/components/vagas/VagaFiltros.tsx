@@ -51,6 +51,14 @@ const CONTRATOS = [
   { value: "TRAINEE", label: "Trainee" },
 ];
 
+const PERIODOS = [
+  { value: "", label: "Qualquer data" },
+  { value: "24h", label: "Últimas 24 horas" },
+  { value: "7d", label: "Últimos 7 dias" },
+  { value: "15d", label: "Últimos 15 dias" },
+  { value: "30d", label: "Últimos 30 dias" },
+];
+
 const FONTES = [
   { value: "", label: "Todas as fontes" },
   { value: "Gupy", label: "Gupy" },
@@ -100,7 +108,8 @@ export function VagaFiltros() {
     searchParams.has("modalidade") ||
     searchParams.has("nivel") ||
     searchParams.has("tipoContrato") ||
-    searchParams.has("fonte");
+    searchParams.has("fonte") ||
+    searchParams.has("periodo");
 
   return (
     <div className="bg-background border rounded-lg p-4 space-y-4">
@@ -169,6 +178,15 @@ export function VagaFiltros() {
           onChange={(e) => updateParam("fonte", e.target.value)}
         >
           {FONTES.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </Select>
+
+        <Select
+          value={searchParams.get("periodo") ?? ""}
+          onChange={(e) => updateParam("periodo", e.target.value)}
+        >
+          {PERIODOS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </Select>

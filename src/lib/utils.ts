@@ -45,6 +45,18 @@ export function timeAgo(date: Date | string): string {
   return d.toLocaleDateString("pt-BR");
 }
 
+const PERIODO_MS: Record<string, number> = {
+  "24h": 24 * 60 * 60 * 1000,
+  "7d": 7 * 24 * 60 * 60 * 1000,
+  "15d": 15 * 24 * 60 * 60 * 1000,
+  "30d": 30 * 24 * 60 * 60 * 1000,
+};
+
+export function getPeriodoDate(periodo?: string): Date | undefined {
+  if (!periodo || !(periodo in PERIODO_MS)) return undefined;
+  return new Date(Date.now() - PERIODO_MS[periodo]);
+}
+
 export function buildCacheKey(prefix: string, params: Record<string, unknown>): string {
   const sorted = Object.keys(params)
     .sort()

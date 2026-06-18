@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { cacheGet, cacheSet } from "@/lib/redis";
-import { slugify } from "@/lib/utils";
+import { slugify, getPeriodoDate } from "@/lib/utils";
 import { buildCacheKey } from "@/lib/utils";
 import type { Cargo, Modalidade, Nivel, TipoContrato, Prisma } from "@prisma/client";
 
@@ -16,6 +16,7 @@ const querySchema = z.object({
   cidade: z.string().optional(),
   salarioMin: z.coerce.number().optional(),
   fonte: z.string().optional(),
+  periodo: z.string().optional(),
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(50).default(20),
 });
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Parâmetros inválidos", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { q, cargo, modalidade, nivel, tipoContrato, estado, cidade, salarioMin, fonte, page, limit } = parsed.data;
+  const { q, cargo, modalidade, nivel, tipoContrato, estado, cidade, salarioMin, fonte, periodo, page, limit } = parsed.data;
 
   const cacheKey = buildCacheKey("vagas", parsed.data);
   const cached = await cacheGet(cacheKey);
@@ -71,6 +72,7 @@ export async function GET(request: NextRequest) {
     ...(cidade && { cidade: { contains: cidade, mode: "insensitive" } }),
     ...(salarioMin && { salarioMin: { gte: salarioMin } }),
     ...(fonte && { nomeFonte: fonte }),
+    ...(getPeriodoDate(periodo) && { criadaEm: { gte: getPeriodoDate(periodo) } }),
   };
 
   const [data, total] = await Promise.all([
