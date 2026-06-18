@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
+import { getPeriodoDate } from "@/lib/utils";
 import { VagaGrid } from "@/components/vagas/VagaGrid";
 import { VagaFiltros } from "@/components/vagas/VagaFiltros";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,6 +34,7 @@ interface PageProps {
     estado?: string;
     cidade?: string;
     fonte?: string;
+    periodo?: string;
     page?: string;
   }>;
 }
@@ -59,6 +61,7 @@ async function fetchVagas(
     ...(sp.estado && { estado: { contains: sp.estado, mode: "insensitive" } }),
     ...(sp.cidade && { cidade: { contains: sp.cidade, mode: "insensitive" } }),
     ...(sp.fonte && { nomeFonte: sp.fonte }),
+    ...(getPeriodoDate(sp.periodo) && { criadaEm: { gte: getPeriodoDate(sp.periodo) } }),
   };
 
   const [vagas, total] = await Promise.all([
