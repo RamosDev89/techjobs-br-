@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +30,7 @@ function Sheet({ open, onOpenChange, children, side = "right" }: SheetProps) {
     bottom: "bottom-0 left-0 w-full h-auto translate-y-0",
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50">
       <div
         className="fixed inset-0 bg-black/50"
@@ -50,7 +51,8 @@ function Sheet({ open, onOpenChange, children, side = "right" }: SheetProps) {
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
