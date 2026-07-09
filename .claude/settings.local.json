@@ -19,7 +19,23 @@
       "WebFetch(domain:remotar.com.br)",
       "WebFetch(domain:crowd.br.com)",
       "Bash(vercel:*)",
-      "Bash(SCRAPER_ENABLED=true npx tsx:*)"
+      "Bash(SCRAPER_ENABLED=true npx tsx:*)",
+      "WebFetch(domain:trampos.co)",
+      "WebFetch(domain:www.vagas.com.br)",
+      "WebFetch(domain:br.indeed.com)",
+      "WebFetch(domain:www.infojobs.com.br)",
+      "Bash(npx ts-node --project tsconfig.json -e ' *)",
+      "Bash(xargs cat)",
+      "Bash(npm run *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(psql \"postgresql://postgres.isplusxbhnsrppgjhype:TechJobsBR%2A123@aws-1-sa-east-1.pooler.supabase.com:5432/postgres\" -c \"SELECT 1;\")",
+      "Skill(run)",
+      "Bash(lsof -i :3000 -sTCP:LISTEN)",
+      "Bash(python3 -c \"import sys,json; d=sys.stdin.read\\(\\); print\\(d[-200:]\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['pagination']\\); print\\([j['name'] for j in d['data']]\\)\")",
+      "Bash(npx playwright *)"
     ]
   }
 }
