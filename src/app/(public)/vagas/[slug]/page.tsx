@@ -107,10 +107,17 @@ function buildJobPostingSchema(vaga: NonNullable<Awaited<ReturnType<typeof getVa
     title: vaga.titulo,
     description: vaga.descricao,
     datePosted: (vaga.publicadaEm ?? vaga.criadaEm).toISOString(),
-    validThrough: new Date(
-      (vaga.publicadaEm ?? vaga.criadaEm).getTime() + 90 * 24 * 60 * 60 * 1000
+    validThrough: (
+      vaga.expiradaEm ??
+      new Date((vaga.publicadaEm ?? vaga.criadaEm).getTime() + 90 * 24 * 60 * 60 * 1000)
     ).toISOString(),
     employmentType: EMPLOYMENT_TYPE_MAP[vaga.tipoContrato] ?? "OTHER",
+    identifier: {
+      "@type": "PropertyValue",
+      name: vaga.empresa.nome,
+      value: vaga.id,
+    },
+    directApply: false,
     hiringOrganization: {
       "@type": "Organization",
       name: vaga.empresa.nome,
