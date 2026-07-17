@@ -160,6 +160,24 @@ function buildJobPostingSchema(vaga: NonNullable<Awaited<ReturnType<typeof getVa
   return schema;
 }
 
+function buildBreadcrumbSchema(vaga: NonNullable<Awaited<ReturnType<typeof getVaga>>>) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+      { "@type": "ListItem", position: 2, name: "Vagas", item: `${baseUrl}/vagas` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: vaga.titulo,
+        item: `${baseUrl}/vagas/${vaga.slug}`,
+      },
+    ],
+  };
+}
+
 export default async function VagaPage({ params }: Props) {
   const { slug } = await params;
   const vaga = await getVaga(slug);
@@ -173,12 +191,17 @@ export default async function VagaPage({ params }: Props) {
   const salario = formatSalary(vaga.salarioMin, vaga.salarioMax, vaga.moeda);
   const localidade = [vaga.cidade, vaga.estado].filter(Boolean).join(", ");
   const jobPostingSchema = buildJobPostingSchema(vaga);
+  const breadcrumbSchema = buildBreadcrumbSchema(vaga);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <div className="mb-6">
         <Link
