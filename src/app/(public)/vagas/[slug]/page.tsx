@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { LandingVagas } from "@/components/seo/LandingVagas";
+import {
+  parseLandingSlug,
+  landingTitle,
+  landingWhere,
+  LANDING_INDEX_THRESHOLD,
+} from "@/lib/seo-landings";
 import {
   MapPin,
   Clock,
@@ -38,11 +45,37 @@ function stripHtml(html: string): string {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
+  const url = `${baseUrl}/vagas/${slug}`;
+
+  // Landing page SEO programática
+  const landing = parseLandingSlug(slug);
+  if (landing) {
+    const total = await prisma.vaga.count({ where: landingWhere(landing) });
+    const title = landingTitle(landing);
+    const description = `${total} vaga${total !== 1 ? "s" : ""} de ${landing.tech}${
+      landing.remoto
+        ? " remotas"
+        : landing.cidade
+        ? ` em ${landing.cidade.nome}, ${landing.cidade.uf}`
+        : ""
+    } no Brasil. Salários, empresas e candidatura direta. Atualizado diariamente.`;
+    return {
+      title,
+      description,
+      alternates: { canonical: url },
+      ...(total < LANDING_INDEX_THRESHOLD && {
+        robots: { index: false, follow: true },
+      }),
+      openGraph: { title, description, url, type: "website" },
+      twitter: { card: "summary_large_image", title, description },
+    };
+  }
+
+  // Detalhe de vaga
   const vaga = await getVaga(slug);
   if (!vaga) return { title: "Vaga não encontrada" };
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
-  const url = `${baseUrl}/vagas/${slug}`;
   const description = stripHtml(vaga.descricao).slice(0, 160);
   const title = `${vaga.titulo} — ${vaga.empresa.nome}`;
 
@@ -180,6 +213,12 @@ function buildBreadcrumbSchema(vaga: NonNullable<Awaited<ReturnType<typeof getVa
 
 export default async function VagaPage({ params }: Props) {
   const { slug } = await params;
+
+  // Landing page SEO programática — early return antes de getVaga
+  // (evita contador de views e notFound pra landings)
+  const landing = parseLandingSlug(slug);
+  if (landing) return <LandingVagas landing={landing} />;
+
   const vaga = await getVaga(slug);
   if (!vaga) notFound();
 
