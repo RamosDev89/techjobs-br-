@@ -11,6 +11,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatSalary, timeAgo } from "@/lib/utils";
+import { SLUG_BY_TECH } from "@/lib/seo-landings";
 import type { VagaComEmpresa } from "@/types";
 
 const modalidadeLabel: Record<string, string> = {
@@ -126,14 +127,17 @@ export function VagaCard({ vaga }: VagaCardProps) {
 
             {vaga.tecnologias.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {vaga.tecnologias.slice(0, 6).map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2 py-0.5 text-xs rounded-md bg-muted text-muted-foreground"
-                  >
-                    {tech}
-                  </span>
-                ))}
+                {vaga.tecnologias.slice(0, 6).map((tech) => {
+                  const techSlug = SLUG_BY_TECH[tech];
+                  const cls = "px-2 py-0.5 text-xs rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors";
+                  return techSlug ? (
+                    <Link key={tech} href={`/vagas/${techSlug}`} onClick={(e) => e.stopPropagation()} className={cls}>
+                      {tech}
+                    </Link>
+                  ) : (
+                    <span key={tech} className={cls}>{tech}</span>
+                  );
+                })}
                 {vaga.tecnologias.length > 6 && (
                   <span className="px-2 py-0.5 text-xs rounded-md bg-muted text-muted-foreground">
                     +{vaga.tecnologias.length - 6}

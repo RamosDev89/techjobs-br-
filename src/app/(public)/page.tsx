@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
 import { VagaCard } from "@/components/vagas/VagaCard";
+import { LandingLinks } from "@/components/seo/LandingLinks";
 import type { VagaComEmpresa } from "@/types";
+import { SLUG_BY_TECH } from "@/lib/seo-landings";
 
 export const revalidate = 300; // 5 min
 
@@ -68,8 +70,15 @@ async function getRecentes(): Promise<VagaComEmpresa[]> {
   }) as Promise<VagaComEmpresa[]>;
 }
 
-const POPULAR_SEARCHES = [
-  "React", "Node.js", "Python", "TypeScript", "Java", "Remota", "AWS", "Kubernetes",
+const POPULAR_SEARCHES: { label: string; href: string }[] = [
+  { label: "React",       href: `/vagas/${SLUG_BY_TECH["React"]}` },
+  { label: "Node.js",     href: `/vagas/${SLUG_BY_TECH["Node.js"]}` },
+  { label: "Python",      href: `/vagas/${SLUG_BY_TECH["Python"]}` },
+  { label: "TypeScript",  href: `/vagas/${SLUG_BY_TECH["TypeScript"]}` },
+  { label: "Java",        href: `/vagas/${SLUG_BY_TECH["Java"]}` },
+  { label: "Remota",      href: "/vagas?modalidade=REMOTA" },
+  { label: "AWS",         href: `/vagas/${SLUG_BY_TECH["AWS"]}` },
+  { label: "Kubernetes",  href: `/vagas/${SLUG_BY_TECH["Kubernetes"]}` },
 ];
 
 const CARGOS = [
@@ -130,10 +139,10 @@ export default async function HomePage() {
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center">
-            {POPULAR_SEARCHES.map((term) => (
-              <Link key={term} href={`/vagas?q=${encodeURIComponent(term)}`}>
+            {POPULAR_SEARCHES.map((s) => (
+              <Link key={s.href} href={s.href}>
                 <Badge variant="outline" className="cursor-pointer hover:bg-accent">
-                  {term}
+                  {s.label}
                 </Badge>
               </Link>
             ))}
@@ -206,6 +215,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Landing links — crawl path + SEO */}
+      <LandingLinks />
 
       {/* Features */}
       <section className="py-16">

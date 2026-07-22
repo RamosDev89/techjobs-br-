@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
+import { LandingLinks } from "@/components/seo/LandingLinks";
 import { getPeriodoDate } from "@/lib/utils";
 import { VagaGrid } from "@/components/vagas/VagaGrid";
 import { VagaFiltros } from "@/components/vagas/VagaFiltros";
@@ -139,6 +140,8 @@ export default async function VagasPage({ searchParams }: PageProps) {
           <Pagination page={page} totalPages={totalPages} />
         </div>
       </div>
+
+      <LandingLinks compact />
     </div>
   );
 }
