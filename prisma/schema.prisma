@@ -124,6 +124,7 @@ model Vaga {
   @@index([nivel])
   @@index([slug])
   @@index([nomeFonte])
+  @@index([tecnologias], type: Gin)
   @@map("vagas")
 }
 
