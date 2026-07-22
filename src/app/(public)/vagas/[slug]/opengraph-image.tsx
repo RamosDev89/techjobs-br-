@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { prisma } from "@/lib/prisma";
 import { formatSalary } from "@/lib/utils";
+import { parseLandingSlug, landingTitle } from "@/lib/seo-landings";
 
 export const runtime = "nodejs";
 export const revalidate = 3600;
@@ -26,12 +27,106 @@ const nivelLabel: Record<string, string> = {
   GERENCIA: "Gerência",
 };
 
+function renderOgCard({
+  titulo,
+  empresa,
+  salario,
+  tags,
+}: {
+  titulo: string;
+  empresa: string;
+  salario: string;
+  tags: string[];
+}) {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "64px",
+        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+        color: "#f8fafc",
+        fontFamily: "sans-serif",
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div style={{ display: "flex", gap: "12px" }}>
+          {tags.map((tag) => (
+            <div
+              key={tag}
+              style={{
+                display: "flex",
+                padding: "8px 20px",
+                borderRadius: "9999px",
+                background: "#1d4ed8",
+                fontSize: "26px",
+                fontWeight: 600,
+              }}
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: titulo.length > 60 ? "52px" : "64px",
+            fontWeight: 700,
+            lineHeight: 1.15,
+          }}
+        >
+          {titulo}
+        </div>
+        <div style={{ display: "flex", fontSize: "36px", color: "#94a3b8" }}>
+          {empresa}
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", fontSize: "32px", color: "#4ade80", fontWeight: 600 }}>
+          {salario}
+        </div>
+        <div style={{ display: "flex", fontSize: "32px", fontWeight: 700 }}>
+          TechJobs <span style={{ color: "#3b82f6" }}>BR</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default async function OgImage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  // Landing page SEO: pula DB lookup, usa título da landing
+  const landing = parseLandingSlug(slug);
+  if (landing) {
+    const titulo = landingTitle(landing);
+    const tags = landing.remoto
+      ? ["Remoto"]
+      : landing.cidade
+      ? [landing.cidade.nome]
+      : [];
+    const salario = "";
+    const empresa = "TechJobs BR";
+    return new ImageResponse(
+      renderOgCard({ titulo, empresa, salario, tags }),
+      size
+    );
+  }
+
   const vaga = await prisma.vaga.findUnique({
     where: { slug, ativa: true },
     include: { empresa: true },
@@ -44,70 +139,5 @@ export default async function OgImage({
     ? [modalidadeLabel[vaga.modalidade], nivelLabel[vaga.nivel]].filter(Boolean)
     : [];
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "64px",
-          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-          color: "#f8fafc",
-          fontFamily: "sans-serif",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          <div style={{ display: "flex", gap: "12px" }}>
-            {tags.map((tag) => (
-              <div
-                key={tag}
-                style={{
-                  display: "flex",
-                  padding: "8px 20px",
-                  borderRadius: "9999px",
-                  background: "#1d4ed8",
-                  fontSize: "26px",
-                  fontWeight: 600,
-                }}
-              >
-                {tag}
-              </div>
-            ))}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontSize: titulo.length > 60 ? "52px" : "64px",
-              fontWeight: 700,
-              lineHeight: 1.15,
-            }}
-          >
-            {titulo}
-          </div>
-          <div style={{ display: "flex", fontSize: "36px", color: "#94a3b8" }}>
-            {empresa}
-          </div>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", fontSize: "32px", color: "#4ade80", fontWeight: 600 }}>
-            {salario}
-          </div>
-          <div style={{ display: "flex", fontSize: "32px", fontWeight: 700 }}>
-            TechJobs <span style={{ color: "#3b82f6" }}>BR</span>
-          </div>
-        </div>
-      </div>
-    ),
-    size
-  );
+  return new ImageResponse(renderOgCard({ titulo, empresa, salario, tags }), size);
 }
