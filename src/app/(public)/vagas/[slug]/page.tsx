@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { LandingVagas } from "@/components/seo/LandingVagas";
+import { CursosAfiliados } from "@/components/seo/CursosAfiliados";
 import {
   parseLandingSlug,
   landingTitle,
@@ -448,6 +449,8 @@ export default async function VagaPage({ params }: Props) {
               </Link>
             </CardContent>
           </Card>
+
+          <CursosAfiliados techs={vaga.tecnologias} />
         </aside>
       </div>
     </div>

@@ -11,6 +11,7 @@ import {
   landingSlug,
   LANDING_INDEX_THRESHOLD,
 } from "@/lib/seo-landings";
+import { CursosAfiliados } from "@/components/seo/CursosAfiliados";
 import type { VagaComEmpresa } from "@/types";
 
 // Top 4 cidades pra cross-links (as mais populosas em tech BR)
@@ -165,6 +166,10 @@ export async function LandingVagas({ landing }: { landing: LandingParams }) {
       </div>
 
       <VagaGrid vagas={vagas as VagaComEmpresa[]} />
+
+      <div className="mt-8">
+        <CursosAfiliados techs={[landing.tech]} />
+      </div>
 
       {total > 30 && (
         <div className="mt-8 text-center">
