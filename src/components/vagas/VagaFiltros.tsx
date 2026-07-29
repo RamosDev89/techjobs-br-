@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { useCallback, useState } from "react";
+import { Search, SlidersHorizontal, Bell, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
 
 const CARGOS = [
   { value: "", label: "Todos os cargos" },
@@ -102,6 +103,33 @@ const ESTADOS = [
 export function VagaFiltros() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [alertaStatus, setAlertaStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+
+  const criarAlerta = useCallback(async () => {
+    setAlertaStatus("loading");
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      const next = encodeURIComponent(`/vagas?${searchParams.toString()}`);
+      router.push(`/cadastro?next=${next}`);
+      return;
+    }
+    const filtros = {
+      q: searchParams.get("q") ?? undefined,
+      cargo: searchParams.get("cargo") ?? undefined,
+      modalidade: searchParams.get("modalidade") ?? undefined,
+      nivel: searchParams.get("nivel") ?? undefined,
+      tipoContrato: searchParams.get("tipoContrato") ?? undefined,
+      estado: searchParams.get("estado") ?? undefined,
+      salarioMin: searchParams.get("salarioMin") ?? undefined,
+    };
+    const res = await fetch("/api/alertas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filtros }),
+    });
+    setAlertaStatus(res.ok ? "ok" : "error");
+    if (res.ok) setTimeout(() => setAlertaStatus("idle"), 3000);
+  }, [router, searchParams]);
 
   const updateParam = useCallback(
     (key: string, value: string) => {
@@ -236,6 +264,29 @@ export function VagaFiltros() {
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </Select>
+      </div>
+
+      <div className="pt-1 border-t">
+        {alertaStatus === "ok" ? (
+          <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+            <CheckCircle2 className="h-4 w-4" />
+            Alerta criado! Você receberá emails com novas vagas.
+          </div>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-2"
+            disabled={alertaStatus === "loading"}
+            onClick={() => void criarAlerta()}
+          >
+            <Bell className="h-3.5 w-3.5" />
+            {alertaStatus === "loading" ? "Salvando..." : "Criar alerta com esses filtros"}
+          </Button>
+        )}
+        {alertaStatus === "error" && (
+          <p className="text-xs text-destructive mt-1">Erro ao criar alerta. Tente novamente.</p>
+        )}
       </div>
     </div>
   );

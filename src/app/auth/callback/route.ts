@@ -5,8 +5,13 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
 
+  const nextParam = searchParams.get("next");
   const redirectCookie = request.cookies.get("auth_redirect")?.value;
-  const next = redirectCookie ? decodeURIComponent(redirectCookie) : "/dashboard";
+  const next = nextParam
+    ? decodeURIComponent(nextParam)
+    : redirectCookie
+    ? decodeURIComponent(redirectCookie)
+    : "/dashboard";
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login?error=oauth_failed`);
