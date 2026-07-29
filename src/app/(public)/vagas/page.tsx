@@ -36,6 +36,7 @@ interface PageProps {
     cidade?: string;
     fonte?: string;
     periodo?: string;
+    salarioMin?: string;
     page?: string;
   }>;
 }
@@ -63,6 +64,7 @@ async function fetchVagas(
     ...(sp.cidade && { cidade: { contains: sp.cidade, mode: "insensitive" } }),
     ...(sp.fonte && { nomeFonte: sp.fonte }),
     ...(getPeriodoDate(sp.periodo) && { criadaEm: { gte: getPeriodoDate(sp.periodo) } }),
+    ...(sp.salarioMin && { salarioMin: { gte: Number(sp.salarioMin) } }),
   };
 
   const [vagas, total] = await Promise.all([
