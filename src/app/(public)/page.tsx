@@ -52,7 +52,7 @@ async function getDestacadas(): Promise<VagaComEmpresa[]> {
         select: { id: true, nome: true, slug: true, logo: true, tamanho: true, localizacao: true, verificada: true },
       },
     },
-    orderBy: { criadaEm: "desc" },
+    orderBy: [{ destacada: "desc" }, { criadaEm: "desc" }],
     take: 6,
   }) as Promise<VagaComEmpresa[]>;
 }
@@ -131,7 +131,7 @@ export default async function HomePage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/para-empresas">
+              <Link href="/anuncie">
                 Publicar vaga
                 <ArrowRight className="h-5 w-5" />
               </Link>
