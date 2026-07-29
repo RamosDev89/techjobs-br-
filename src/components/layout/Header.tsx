@@ -10,7 +10,7 @@ import { Sheet, SheetHeader, SheetTitle, SheetContent } from "@/components/ui/sh
 const navLinks = [
   { href: "/vagas", label: "Vagas" },
   { href: "/empresas", label: "Empresas" },
-  { href: "/para-empresas", label: "Para Empresas" },
+  { href: "/anuncie", label: "Para Empresas" },
 ];
 
 export function Header() {
