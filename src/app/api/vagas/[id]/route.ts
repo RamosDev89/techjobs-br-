@@ -19,6 +19,7 @@ const updateSchema = z.object({
   beneficios: z.array(z.string()).optional(),
   ativa: z.boolean().optional(),
   destacada: z.boolean().optional(),
+  expiradaEm: z.string().datetime().optional(),
 });
 
 export async function GET(
@@ -64,9 +65,13 @@ export async function PUT(
       );
     }
 
+    const { expiradaEm, ...rest } = parsed.data;
     const vaga = await prisma.vaga.update({
       where: { id },
-      data: parsed.data,
+      data: {
+        ...rest,
+        ...(expiradaEm !== undefined && { expiradaEm: new Date(expiradaEm) }),
+      },
       include: { empresa: true },
     });
 
