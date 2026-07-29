@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'hourly', priority: 1.0 },
     { url: `${BASE_URL}/vagas`, lastModified: new Date(), changeFrequency: 'hourly', priority: 0.9 },
+    { url: `${BASE_URL}/empresas`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${BASE_URL}/anuncie`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ]
 
@@ -67,7 +68,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }))
 
-    return [...staticRoutes, ...landingRoutes, ...vagaRoutes]
+    const empresas = await prisma.empresa.findMany({
+      where: { vagas: { some: { ativa: true } } },
+      select: { slug: true, atualizadaEm: true },
+    })
+    const empresaRoutes: MetadataRoute.Sitemap = empresas.map((e) => ({
+      url: `${BASE_URL}/empresas/${e.slug}`,
+      lastModified: e.atualizadaEm,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }))
+
+    return [...staticRoutes, ...landingRoutes, ...vagaRoutes, ...empresaRoutes]
   } catch (e) {
     console.error('Sitemap error:', e)
     return staticRoutes
