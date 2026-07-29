@@ -73,6 +73,32 @@ const FONTES = [
   { value: "InfoJobs", label: "InfoJobs" },
 ];
 
+const SALARIOS = [
+  { value: "", label: "Qualquer salário" },
+  { value: "5000", label: "A partir de R$5.000" },
+  { value: "8000", label: "A partir de R$8.000" },
+  { value: "10000", label: "A partir de R$10.000" },
+  { value: "12000", label: "A partir de R$12.000" },
+  { value: "15000", label: "A partir de R$15.000" },
+  { value: "20000", label: "A partir de R$20.000" },
+];
+
+const ESTADOS = [
+  { value: "", label: "Todos os estados" },
+  { value: "SP", label: "São Paulo" },
+  { value: "RJ", label: "Rio de Janeiro" },
+  { value: "MG", label: "Minas Gerais" },
+  { value: "RS", label: "Rio Grande do Sul" },
+  { value: "PR", label: "Paraná" },
+  { value: "SC", label: "Santa Catarina" },
+  { value: "BA", label: "Bahia" },
+  { value: "DF", label: "Distrito Federal" },
+  { value: "GO", label: "Goiás" },
+  { value: "PE", label: "Pernambuco" },
+  { value: "CE", label: "Ceará" },
+  { value: "AM", label: "Amazonas" },
+];
+
 export function VagaFiltros() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -109,7 +135,9 @@ export function VagaFiltros() {
     searchParams.has("nivel") ||
     searchParams.has("tipoContrato") ||
     searchParams.has("fonte") ||
-    searchParams.has("periodo");
+    searchParams.has("periodo") ||
+    searchParams.has("salarioMin") ||
+    searchParams.has("estado");
 
   return (
     <div className="bg-background border rounded-lg p-4 space-y-4">
@@ -169,6 +197,24 @@ export function VagaFiltros() {
           onChange={(e) => updateParam("tipoContrato", e.target.value)}
         >
           {CONTRATOS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </Select>
+
+        <Select
+          value={searchParams.get("estado") ?? ""}
+          onChange={(e) => updateParam("estado", e.target.value)}
+        >
+          {ESTADOS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </Select>
+
+        <Select
+          value={searchParams.get("salarioMin") ?? ""}
+          onChange={(e) => updateParam("salarioMin", e.target.value)}
+        >
+          {SALARIOS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </Select>
