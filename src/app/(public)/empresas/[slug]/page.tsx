@@ -9,7 +9,7 @@ import { VagaCard } from "@/components/vagas/VagaCard";
 import { prisma } from "@/lib/prisma";
 import type { VagaComEmpresa } from "@/types";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
 
