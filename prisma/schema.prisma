@@ -69,6 +69,13 @@ enum StatusCandidatura {
   APROVADA
 }
 
+enum StatusPedido {
+  PENDENTE
+  PAGO
+  FALHOU
+  REEMBOLSADO
+}
+
 model Empresa {
   id           String         @id @default(cuid())
   nome         String
@@ -117,6 +124,7 @@ model Vaga {
   atualizadaEm  DateTime     @updatedAt
   candidaturas  Candidatura[]
   favoritos     Favorito[]
+  pedido        Pedido?
 
   @@index([ativa, criadaEm(sort: Desc)])
   @@index([cargo])
@@ -165,4 +173,19 @@ model Favorito {
 
   @@unique([usuarioId, vagaId])
   @@map("favoritos")
+}
+
+model Pedido {
+  id             String       @id @default(cuid())
+  vagaId         String       @unique
+  vaga           Vaga         @relation(fields: [vagaId], references: [id], onDelete: Cascade)
+  status         StatusPedido @default(PENDENTE)
+  mpPreferenceId String?
+  mpPaymentId    String?
+  valor          Float
+  emailContato   String
+  criadaEm       DateTime     @default(now())
+  atualizadaEm   DateTime     @updatedAt
+
+  @@map("pedidos")
 }
