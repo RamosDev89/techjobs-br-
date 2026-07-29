@@ -131,7 +131,7 @@ export function VagaCard({ vaga }: VagaCardProps) {
                   const techSlug = SLUG_BY_TECH[tech];
                   const cls = "px-2 py-0.5 text-xs rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors";
                   return techSlug ? (
-                    <Link key={tech} href={`/vagas/${techSlug}`} onClick={(e) => e.stopPropagation()} className={cls}>
+                    <Link key={tech} href={`/vagas/${techSlug}`} className={cls}>
                       {tech}
                     </Link>
                   ) : (
