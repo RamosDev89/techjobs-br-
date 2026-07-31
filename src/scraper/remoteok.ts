@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs } from "./utils";
+import { guessCargo, guessNivel, extractTechs, cleanDescription } from "./utils";
 
 interface RemoteOKJob {
   slug: string;
@@ -46,7 +46,7 @@ export async function scrapeRemoteOK(options: ScraperOptions = {}): Promise<Scra
 
       vagas.push({
         titulo: entry.position,
-        descricao: entry.description ?? "",
+        descricao: cleanDescription(entry.description ?? ""),
         empresaNome: entry.company,
         publicadaEm: entry.epoch ? new Date(entry.epoch * 1000) : undefined,
         modalidade: "REMOTA",

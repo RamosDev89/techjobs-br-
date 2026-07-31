@@ -2,7 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs } from "./utils";
+import { guessCargo, guessNivel, extractTechs, cleanDescription } from "./utils";
 
 export async function scrapeGeekHunter(options: ScraperOptions = {}): Promise<ScraperResult> {
   const { maxResults = 50 } = options;
@@ -47,7 +47,7 @@ export async function scrapeGeekHunter(options: ScraperOptions = {}): Promise<Sc
 
       vagas.push({
         titulo,
-        descricao: descEl,
+        descricao: cleanDescription(descEl),
         empresaNome: empresa,
         modalidade,
         nivel: guessNivel(titulo),
