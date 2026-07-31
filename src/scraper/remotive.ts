@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs } from "./utils";
+import { guessCargo, guessNivel, extractTechs, cleanDescription } from "./utils";
 
 interface RemotiveJob {
   id: number;
@@ -56,7 +56,7 @@ export async function scrapeRemotive(options: ScraperOptions = {}): Promise<Scra
 
         vagas.push({
           titulo: job.title,
-          descricao: job.description ?? "",
+          descricao: cleanDescription(job.description ?? ""),
           empresaNome: job.company_name,
           empresaSite: job.company_url,
           publicadaEm: job.publication_date ? new Date(job.publication_date) : undefined,

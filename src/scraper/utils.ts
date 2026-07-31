@@ -222,3 +222,36 @@ export function extractTechs(text: string): string[] {
     new RegExp(`\\b${t.replace(".", "\\.").replace("+", "\\+")}\\b`, "i").test(text)
   );
 }
+
+// Spam patterns injected by scraped sources (e.g. RemoteOK)
+const SPAM_PATTERNS = [
+  /Please mention the word[\s\S]*?(\n|$)/gi,
+  /\*\*[A-Z]{4,}\*\*\s+and tag [A-Za-z0-9+/=]+[\s\S]*?(\n\n|$)/gi,
+  /\(#[A-Za-z0-9+/=]+\)[\s\S]*?(\n\n|$)/gi,
+];
+
+function hasMojibake(str: string): boolean {
+  return /[\xC0-\xC3][\x80-\xBF]/.test(str) || /Ã[¡-¿©ª«¬­®¯°±²³´µ¶·¸¹º»]/.test(str);
+}
+
+function fixMojibake(str: string): string {
+  try {
+    const bytes = Buffer.from(str, "latin1");
+    const decoded = bytes.toString("utf8");
+    // Only use fix if it reduced the Ã count (i.e., it was actually mojibake)
+    return decoded;
+  } catch {
+    return str;
+  }
+}
+
+export function cleanDescription(desc: string): string {
+  let text = desc;
+  // Fix encoding mojibake (UTF-8 bytes read as Latin-1)
+  if (hasMojibake(text)) text = fixMojibake(text);
+  // Strip known spam patterns
+  for (const pattern of SPAM_PATTERNS) text = text.replace(pattern, "");
+  // Normalize excessive blank lines
+  text = text.replace(/\n{3,}/g, "\n\n").trim();
+  return text;
+}

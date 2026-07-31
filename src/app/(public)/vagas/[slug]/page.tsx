@@ -44,6 +44,18 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
+const DISPLAY_SPAM = [
+  /Please mention the word[\s\S]*?(\n\n|<br\s*\/?>|$)/gi,
+  /\*\*[A-Z]{4,}\*\*\s+and tag [A-Za-z0-9+/=]+[\s\S]*?(\n\n|<br\s*\/?>|$)/gi,
+  /\(#[A-Za-z0-9+/=]+\)[\s\S]*?(\n\n|<br\s*\/?>|$)/gi,
+];
+
+function sanitizeDescription(desc: string): string {
+  let text = desc;
+  for (const p of DISPLAY_SPAM) text = text.replace(p, "");
+  return text.replace(/(<br\s*\/?>\s*){3,}/gi, "<br/><br/>").trim();
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://techjobsbr.com.br";
@@ -321,7 +333,7 @@ export default async function VagaPage({ params }: Props) {
             <CardContent>
               <div
                 className="prose prose-sm dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: vaga.descricao.replace(/\n/g, "<br/>") }}
+                dangerouslySetInnerHTML={{ __html: sanitizeDescription(vaga.descricao.replace(/\n/g, "<br/>")) }}
               />
             </CardContent>
           </Card>
