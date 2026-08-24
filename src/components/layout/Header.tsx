@@ -24,7 +24,7 @@ export function Header() {
           <span>TechJobs BR</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 flex-1">
+        <nav className="hidden md:flex items-center gap-6 flex-1" aria-label="Navegação principal">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -48,8 +48,8 @@ export function Header() {
 
         <div className="flex items-center gap-2 ml-auto md:hidden">
           <ThemeToggle />
-          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
-            <Menu className="h-5 w-5" />
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label="Abrir menu">
+            <Menu className="h-5 w-5" aria-hidden="true" />
           </Button>
         </div>
       </div>
@@ -59,7 +59,7 @@ export function Header() {
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
         <SheetContent>
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col gap-4" aria-label="Navegação mobile">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Briefcase } from "lucide-react";
@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export default function CadastroPage() {
+function CadastroForm() {
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/dashboard";
 
@@ -149,5 +149,13 @@ export default function CadastroPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function CadastroPage() {
+  return (
+    <Suspense>
+      <CadastroForm />
+    </Suspense>
   );
 }
