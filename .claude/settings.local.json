@@ -35,7 +35,14 @@
       "Bash(python3 -c ' *)",
       "Bash(python3 -m json.tool)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['pagination']\\); print\\([j['name'] for j in d['data']]\\)\")",
-      "Bash(npx playwright *)"
+      "Bash(npx playwright *)",
+      "Skill(schedule)",
+      "Bash(npx tsx *)",
+      "Bash(flutter --version)",
+      "Bash(brew --version)",
+      "Bash(brew install *)",
+      "Bash(flutter doctor *)",
+      "Bash(tsx *)"
     ]
   }
 }
