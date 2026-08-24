@@ -14,7 +14,8 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "scraper": "tsx --env-file=.env.local src/scraper/index.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -39,6 +40,14 @@
     "tailwind-merge": "^2.5.4",
     "zod": "^3.23.8"
   },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "last 2 iOS versions",
+    "not dead"
+  ],
   "devDependencies": {
     "@playwright/test": "^1.48.2",
     "@types/node": "^20.17.6",
