@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs } from "./utils";
+import { guessCargo, guessNivel, extractTechs, httpsAgent } from "./utils";
 
 // BR tech companies known to use Lever — 404s are silently skipped
 const COMPANIES = [
@@ -74,6 +74,7 @@ export async function scrapeLever(options: ScraperOptions = {}): Promise<Scraper
       const url = `https://api.lever.co/v0/postings/${company}?mode=json`;
       const res = await axios.get<LeverPosting[]>(url, {
         timeout: 15_000,
+        httpsAgent,
         headers: { "User-Agent": "TechJobsBR/1.0 (+https://techjobsbr.com.br)" },
       });
 

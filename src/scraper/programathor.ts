@@ -2,7 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs, cleanDescription } from "./utils";
+import { guessCargo, guessNivel, extractTechs, cleanDescription, httpsAgent } from "./utils";
 
 export async function scrapeProgramathor(options: ScraperOptions = {}): Promise<ScraperResult> {
   const { maxResults = 50 } = options;
@@ -12,6 +12,7 @@ export async function scrapeProgramathor(options: ScraperOptions = {}): Promise<
   try {
     const res = await axios.get("https://programathor.com.br/jobs", {
       timeout: 20_000,
+      httpsAgent,
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; TechJobsBR/1.0)",
         Accept: "text/html",

@@ -2,7 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs } from "./utils";
+import { guessCargo, guessNivel, extractTechs, httpsAgent } from "./utils";
 
 interface TramposJob {
   id: number;
@@ -47,6 +47,7 @@ export async function scrapeTrampos(options: ScraperOptions = {}): Promise<Scrap
     try {
       const res = await axios.get<string>(url, {
         timeout: 20_000,
+        httpsAgent,
         headers: {
           "User-Agent": "Mozilla/5.0 (compatible; TechJobsBR/1.0)",
           Accept: "text/html",

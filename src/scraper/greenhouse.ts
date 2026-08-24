@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ScrapedVaga } from "@/types";
 import type { ScraperOptions, ScraperResult } from "./types";
-import { guessCargo, guessNivel, extractTechs } from "./utils";
+import { guessCargo, guessNivel, extractTechs, httpsAgent } from "./utils";
 
 // BR tech companies known to use Greenhouse — 404s are silently skipped
 const COMPANIES = [
@@ -63,6 +63,7 @@ export async function scrapeGreenhouse(options: ScraperOptions = {}): Promise<Sc
       const url = `https://boards-api.greenhouse.io/v1/boards/${company}/jobs`;
       const res = await axios.get<{ jobs: GreenhouseJob[] }>(url, {
         timeout: 15_000,
+        httpsAgent,
         headers: { "User-Agent": "TechJobsBR/1.0 (+https://techjobsbr.com.br)" },
       });
 

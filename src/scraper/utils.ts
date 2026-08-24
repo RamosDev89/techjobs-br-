@@ -1,4 +1,7 @@
+import https from "https";
 import type { ScrapedVaga } from "@/types";
+
+export const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 type Cargo = ScrapedVaga["cargo"];
 
