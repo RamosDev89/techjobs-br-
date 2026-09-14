@@ -42,7 +42,8 @@
       "Bash(brew --version)",
       "Bash(brew install *)",
       "Bash(flutter doctor *)",
-      "Bash(tsx *)"
+      "Bash(tsx *)",
+      "Bash(npx ts-node *)"
     ]
   }
 }
