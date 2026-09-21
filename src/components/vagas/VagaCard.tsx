@@ -17,8 +17,8 @@ import type { VagaComEmpresa } from "@/types";
 const modalidadeLabel: Record<string, string> = {
   PRESENCIAL: "Presencial",
   HIBRIDA: "Híbrida",
-  REMOTA: "Remota",
-  REMOTA_INTERNACIONAL: "Remota Internacional",
+  REMOTA: "🌎 Remota",
+  REMOTA_INTERNACIONAL: "🌍 Internacional",
 };
 
 const nivelLabel: Record<string, string> = {
@@ -47,11 +47,10 @@ export function VagaCard({ vaga }: VagaCardProps) {
   const localidade = [vaga.cidade, vaga.estado].filter(Boolean).join(", ");
 
   return (
-    <Card className={`group hover:shadow-md transition-shadow ${vaga.destacada ? "border-primary/50 shadow-sm" : ""}`}>
+    <Card className={`group rounded-2xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${vaga.destacada ? "border-orange-300 bg-orange-50/40 dark:bg-orange-950/10" : ""}`}>
       <CardContent className="p-5">
         <div className="flex items-start gap-4">
-          {/* Logo empresa */}
-          <div className="relative h-12 w-12 shrink-0 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+          <div className="relative h-12 w-12 shrink-0 rounded-xl overflow-hidden bg-secondary flex items-center justify-center border border-border">
             {vaga.empresa.logo ? (
               <Image
                 src={vaga.empresa.logo}
@@ -61,7 +60,7 @@ export function VagaCard({ vaga }: VagaCardProps) {
                 sizes="48px"
               />
             ) : (
-              <Briefcase className="h-6 w-6 text-muted-foreground" />
+              <Briefcase className="h-5 w-5 text-primary/60" />
             )}
           </div>
 
@@ -70,14 +69,14 @@ export function VagaCard({ vaga }: VagaCardProps) {
               <div>
                 <Link
                   href={`/vagas/${vaga.slug}`}
-                  className="font-semibold text-base hover:text-primary transition-colors line-clamp-1"
+                  className="font-extrabold text-base hover:text-primary transition-colors line-clamp-1"
                 >
                   {vaga.titulo}
                   {vaga.destacada && (
-                    <Star className="inline ml-1.5 h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+                    <Star className="inline ml-1.5 h-3.5 w-3.5 text-orange-500 fill-orange-500" />
                   )}
                 </Link>
-                <p className="text-sm text-muted-foreground mt-0.5">{vaga.empresa.nome}</p>
+                <p className="text-sm text-muted-foreground font-medium mt-0.5">{vaga.empresa.nome}</p>
               </div>
 
               {vaga.fonteExterna && (
@@ -85,7 +84,7 @@ export function VagaCard({ vaga }: VagaCardProps) {
                   href={vaga.fonteExterna}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 text-muted-foreground hover:text-foreground"
+                  className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
                   title={`Ver no ${vaga.nomeFonte}`}
                 >
                   <ExternalLink className="h-4 w-4" />
@@ -93,11 +92,11 @@ export function VagaCard({ vaga }: VagaCardProps) {
               )}
             </div>
 
-            <div className="flex flex-wrap gap-2 mt-3">
+            <div className="flex flex-wrap gap-1.5 mt-3">
               <Badge variant={modalidadeVariant[vaga.modalidade] ?? "secondary"}>
                 {modalidadeLabel[vaga.modalidade]}
               </Badge>
-              <Badge variant="outline">{nivelLabel[vaga.nivel]}</Badge>
+              <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">{nivelLabel[vaga.nivel]}</Badge>
               <Badge variant="outline">{vaga.tipoContrato}</Badge>
               {vaga.nomeFonte && (
                 <Badge variant="secondary" className="text-xs">
@@ -114,8 +113,8 @@ export function VagaCard({ vaga }: VagaCardProps) {
                 </span>
               )}
               {salario !== "A combinar" && (
-                <span className="flex items-center gap-1">
-                  <DollarSign className="h-3.5 w-3.5" />
+                <span className="flex items-center gap-1 font-semibold text-foreground">
+                  <DollarSign className="h-3.5 w-3.5 text-green-500" />
                   {salario}
                 </span>
               )}
@@ -129,7 +128,7 @@ export function VagaCard({ vaga }: VagaCardProps) {
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {vaga.tecnologias.slice(0, 6).map((tech) => {
                   const techSlug = SLUG_BY_TECH[tech];
-                  const cls = "px-2 py-0.5 text-xs rounded-md bg-muted text-muted-foreground hover:bg-muted/80 transition-colors";
+                  const cls = "px-2.5 py-0.5 text-xs rounded-lg bg-secondary text-secondary-foreground font-semibold hover:bg-primary/10 hover:text-primary transition-colors";
                   return techSlug ? (
                     <Link key={tech} href={`/vagas/${techSlug}`} className={cls}>
                       {tech}
@@ -139,7 +138,7 @@ export function VagaCard({ vaga }: VagaCardProps) {
                   );
                 })}
                 {vaga.tecnologias.length > 6 && (
-                  <span className="px-2 py-0.5 text-xs rounded-md bg-muted text-muted-foreground">
+                  <span className="px-2.5 py-0.5 text-xs rounded-lg bg-secondary text-muted-foreground font-semibold">
                     +{vaga.tecnologias.length - 6}
                   </span>
                 )}
