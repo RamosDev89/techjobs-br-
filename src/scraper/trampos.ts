@@ -7,19 +7,18 @@ import { guessCargo, guessNivel, extractTechs, httpsAgent } from "./utils";
 interface TramposJob {
   id: number;
   name: string;
-  type_name: string;
-  category_name: string;
+  type_name: string | string[];
+  category_name: string | string[];
   company_name: string;
   state?: string;
   city?: string;
-  home_office: boolean;
+  home_office?: boolean;
   published_at: string;
 }
 
-interface TramposInitialLoad {
-  opportunities?: TramposJob[];
-  jobs?: TramposJob[];
-  data?: TramposJob[];
+interface TramposPageData {
+  highlighted_opportunities?: TramposJob[];
+  opportunity_groups?: Array<{ opportunities?: TramposJob[] }>;
 }
 
 const PAGES = [
@@ -27,13 +26,44 @@ const PAGES = [
   "https://trampos.co/oportunidades?categoria=design",
 ];
 
-function mapTipoContrato(typeName: string): ScrapedVaga["tipoContrato"] {
-  const t = typeName.toLowerCase();
+function mapTipoContrato(typeName: string | string[]): ScrapedVaga["tipoContrato"] {
+  const t = (Array.isArray(typeName) ? typeName.join(" ") : typeName).toLowerCase();
   if (t.includes("estágio") || t.includes("estagio")) return "ESTAGIO";
   if (t.includes("trainee")) return "TRAINEE";
   if (t.includes("freelance") || t.includes("freela")) return "FREELANCE";
   if (t.includes("pj") || t.includes("pessoa jurídica")) return "PJ";
   return "CLT";
+}
+
+function extractJobs(html: string): TramposJob[] {
+  const jobs: TramposJob[] = [];
+  const seen = new Set<number>();
+
+  // highlighted_opportunities — flat array embedded in page JSON
+  const highlightedMatch = html.match(/"highlighted_opportunities"\s*:\s*(\[[\s\S]*?\])\s*,\s*"/);
+  if (highlightedMatch) {
+    try {
+      const parsed = JSON.parse(highlightedMatch[1]) as TramposJob[];
+      for (const j of parsed) {
+        if (!seen.has(j.id)) { seen.add(j.id); jobs.push(j); }
+      }
+    } catch { /* ignore */ }
+  }
+
+  // opportunity_groups[].opportunities — nested structure
+  const groupsMatch = html.match(/"opportunity_groups"\s*:\s*(\[[\s\S]*?\])\s*\}/);
+  if (groupsMatch) {
+    try {
+      const groups = JSON.parse(groupsMatch[1]) as Array<{ opportunities?: TramposJob[] }>;
+      for (const g of groups) {
+        for (const j of g.opportunities ?? []) {
+          if (!seen.has(j.id)) { seen.add(j.id); jobs.push(j); }
+        }
+      }
+    } catch { /* ignore */ }
+  }
+
+  return jobs;
 }
 
 export async function scrapeTrampos(options: ScraperOptions = {}): Promise<ScraperResult> {
@@ -54,22 +84,7 @@ export async function scrapeTrampos(options: ScraperOptions = {}): Promise<Scrap
         },
       });
 
-      const $ = cheerio.load(res.data);
-
-      // Extract window.initialLoad JSON embedded in the page
-      let jobs: TramposJob[] = [];
-      $("script").each((_, el) => {
-        const src = $(el).html() ?? "";
-        const match = src.match(/window\.initialLoad\s*=\s*(\{[\s\S]+?\});/);
-        if (match) {
-          try {
-            const parsed = JSON.parse(match[1]) as TramposInitialLoad;
-            jobs = parsed.opportunities ?? parsed.jobs ?? parsed.data ?? [];
-          } catch {
-            // ignore parse errors
-          }
-        }
-      });
+      const jobs = extractJobs(res.data);
 
       for (const job of jobs) {
         if (vagas.length >= maxResults) break;
