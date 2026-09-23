@@ -15,7 +15,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
-    "scraper": "tsx --env-file=.env.local src/scraper/index.ts"
+    "scraper": "tsx --env-file=.env.local scripts/run-scraper.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
