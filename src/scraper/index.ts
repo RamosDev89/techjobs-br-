@@ -1,7 +1,6 @@
 import pLimit from "p-limit";
 import { scrapeGupy } from "./gupy";
 import { scrapeProgramathor } from "./programathor";
-import { scrapeGeekHunter } from "./geekHunter";
 import { scrapeRemotive } from "./remotive";
 import { scrapeGreenhouse } from "./greenhouse";
 import { scrapeLever } from "./lever";
@@ -29,7 +28,6 @@ export async function runAllScrapers(): Promise<{
   const results = await Promise.all([
     limit(() => scrapeGupy({ maxResults: maxPerSource })),
     limit(() => scrapeProgramathor({ maxResults: maxPerSource })),
-    limit(() => scrapeGeekHunter({ maxResults: maxPerSource })),
     limit(() => scrapeRemotive({ maxResults: maxPerSource })),
     limit(() => scrapeGreenhouse({ maxResults: maxPerSource })),
     limit(() => scrapeLever({ maxResults: maxPerSource })),
