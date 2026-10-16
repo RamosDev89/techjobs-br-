@@ -22,7 +22,7 @@ function Dialog({ open, onOpenChange, children }: DialogProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div
         className="fixed inset-0 bg-black/50"
         onClick={() => onOpenChange?.(false)}
@@ -41,7 +41,7 @@ function DialogContent({
   return (
     <div
       className={cn(
-        "relative z-50 w-full max-w-lg rounded-lg bg-background p-6 shadow-lg",
+        "relative z-50 w-full max-w-lg mx-3 sm:mx-auto rounded-t-2xl sm:rounded-lg bg-background p-4 sm:p-6 shadow-lg max-h-[90vh] overflow-y-auto",
         className
       )}
       {...props}

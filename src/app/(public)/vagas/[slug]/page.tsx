@@ -265,13 +265,13 @@ export default async function VagaPage({ params }: Props) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 lg:gap-6">
         {/* Main */}
         <div className="space-y-6">
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="relative h-16 w-16 shrink-0 rounded-xl overflow-hidden bg-muted flex items-center justify-center">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="relative h-12 w-12 sm:h-16 sm:w-16 shrink-0 rounded-xl overflow-hidden bg-muted flex items-center justify-center">
                   {vaga.empresa.logo ? (
                     <Image
                       src={vaga.empresa.logo}
@@ -286,7 +286,7 @@ export default async function VagaPage({ params }: Props) {
                 </div>
 
                 <div className="flex-1">
-                  <h1 className="text-2xl font-bold">{vaga.titulo}</h1>
+                  <h1 className="text-xl sm:text-2xl font-bold">{vaga.titulo}</h1>
                   <Link
                     href={`/empresas/${vaga.empresa.slug}`}
                     className="text-muted-foreground hover:text-primary transition-colors"

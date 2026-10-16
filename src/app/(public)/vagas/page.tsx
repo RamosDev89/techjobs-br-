@@ -96,18 +96,18 @@ async function fetchVagas(
 function Pagination({ page, totalPages }: { page: number; totalPages: number }) {
   if (totalPages <= 1) return null;
   return (
-    <div className="flex items-center justify-center gap-2 mt-8">
+    <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-6 sm:mt-8">
       {page > 1 && (
-        <a href={`?page=${page - 1}`} className="px-4 py-2 text-sm border rounded-md hover:bg-accent">
-          ← Anterior
+        <a href={`?page=${page - 1}`} className="px-3 sm:px-4 py-2 text-sm border rounded-md hover:bg-accent">
+          ← <span className="hidden sm:inline">Anterior</span>
         </a>
       )}
-      <span className="text-sm text-muted-foreground">
-        Página {page} de {totalPages}
+      <span className="text-sm text-muted-foreground px-2">
+        {page}/{totalPages}
       </span>
       {page < totalPages && (
-        <a href={`?page=${page + 1}`} className="px-4 py-2 text-sm border rounded-md hover:bg-accent">
-          Próxima →
+        <a href={`?page=${page + 1}`} className="px-3 sm:px-4 py-2 text-sm border rounded-md hover:bg-accent">
+          <span className="hidden sm:inline">Próxima </span>→
         </a>
       )}
     </div>
@@ -130,7 +130,7 @@ export default async function VagasPage({ searchParams }: PageProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4 lg:gap-6">
         <aside>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <VagaFiltros />

@@ -111,7 +111,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="bg-gradient-to-b from-secondary/60 to-background border-b py-16 md:py-20 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-[1fr_360px] gap-10 items-center">
+          <div className="grid md:grid-cols-[1fr_360px] gap-6 md:gap-10 items-center">
 
             {/* Left */}
             <div>
@@ -167,36 +167,36 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right — stat cards */}
-            <div className="hidden md:flex flex-col gap-3">
-              <div className="bg-card rounded-2xl border p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl shrink-0">💼</div>
+            {/* Right — stat cards (desktop: vertical, mobile: horizontal compact) */}
+            <div className="grid grid-cols-3 md:grid-cols-1 gap-2 md:gap-3">
+              <div className="bg-card rounded-2xl border p-3 md:p-5 flex flex-col md:flex-row items-center gap-2 md:gap-4 shadow-sm hover:shadow-md transition-shadow text-center md:text-left">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center text-xl md:text-2xl shrink-0">💼</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-2xl font-black text-primary tracking-tight leading-none">
+                  <p className="text-lg md:text-2xl font-black text-primary tracking-tight leading-none">
                     {stats.totalVagas.toLocaleString("pt-BR")}+
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1 font-medium">Vagas ativas agora</p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-0.5 md:mt-1 font-medium">Vagas ativas</p>
                 </div>
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500 shrink-0 live-dot" />
+                <span className="hidden md:block w-2.5 h-2.5 rounded-full bg-green-500 shrink-0 live-dot" />
               </div>
 
-              <div className="bg-card rounded-2xl border p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-950/30 flex items-center justify-center text-2xl shrink-0">🏢</div>
+              <div className="bg-card rounded-2xl border p-3 md:p-5 flex flex-col md:flex-row items-center gap-2 md:gap-4 shadow-sm hover:shadow-md transition-shadow text-center md:text-left">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-100 dark:bg-orange-950/30 flex items-center justify-center text-xl md:text-2xl shrink-0">🏢</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-2xl font-black text-orange-500 tracking-tight leading-none">
+                  <p className="text-lg md:text-2xl font-black text-orange-500 tracking-tight leading-none">
                     {stats.totalEmpresas.toLocaleString("pt-BR")}+
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1 font-medium">Empresas cadastradas</p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-0.5 md:mt-1 font-medium">Empresas</p>
                 </div>
               </div>
 
-              <div className="bg-card rounded-2xl border p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-950/30 flex items-center justify-center text-2xl shrink-0">🌎</div>
+              <div className="bg-card rounded-2xl border p-3 md:p-5 flex flex-col md:flex-row items-center gap-2 md:gap-4 shadow-sm hover:shadow-md transition-shadow text-center md:text-left">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-green-100 dark:bg-green-950/30 flex items-center justify-center text-xl md:text-2xl shrink-0">🌎</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-2xl font-black text-green-600 dark:text-green-400 tracking-tight leading-none">
+                  <p className="text-lg md:text-2xl font-black text-green-600 dark:text-green-400 tracking-tight leading-none">
                     {stats.totalRemoto.toLocaleString("pt-BR")}+
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1 font-medium">Vagas 100% remotas</p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-0.5 md:mt-1 font-medium">Remotas</p>
                 </div>
               </div>
             </div>
@@ -258,9 +258,9 @@ export default async function HomePage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-black tracking-tight text-center mb-10">Por que usar o TechJobs BR? 🚀</h2>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-5">
             <Card className="rounded-2xl hover:shadow-md hover:-translate-y-1 transition-all duration-200">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-violet-200 dark:from-primary/20 dark:to-violet-900/40 flex items-center justify-center mb-4">
                   <Globe className="h-6 w-6 text-primary" />
                 </div>
@@ -271,7 +271,7 @@ export default async function HomePage() {
               </CardContent>
             </Card>
             <Card className="rounded-2xl hover:shadow-md hover:-translate-y-1 transition-all duration-200">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 flex items-center justify-center mb-4">
                   <Zap className="h-6 w-6 text-orange-500" />
                 </div>
@@ -282,7 +282,7 @@ export default async function HomePage() {
               </CardContent>
             </Card>
             <Card className="rounded-2xl hover:shadow-md hover:-translate-y-1 transition-all duration-200">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 flex items-center justify-center mb-4">
                   <Bell className="h-6 w-6 text-green-600" />
                 </div>
