@@ -49,7 +49,7 @@ export function VagaCard({ vaga }: VagaCardProps) {
   return (
     <Card className={`group rounded-2xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${vaga.destacada ? "border-orange-300 bg-orange-50/40 dark:bg-orange-950/10" : ""}`}>
       <CardContent className="p-5">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="relative h-12 w-12 shrink-0 rounded-xl overflow-hidden bg-secondary flex items-center justify-center border border-border">
             {vaga.empresa.logo ? (
               <Image

@@ -192,7 +192,7 @@ export function VagaFiltros() {
         <Button type="submit" size="sm">Buscar</Button>
       </form>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
         <Select
           value={searchParams.get("cargo") ?? ""}
           onChange={(e) => updateParam("cargo", e.target.value)}

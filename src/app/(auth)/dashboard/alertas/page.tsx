@@ -172,7 +172,7 @@ export default function AlertasPage() {
                 value={filtros.q ?? ""}
                 onChange={(e) => setFiltros((f) => ({ ...f, q: e.target.value }))}
               />
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <Select
                   value={filtros.cargo ?? ""}
                   onChange={(e) => setFiltros((f) => ({ ...f, cargo: e.target.value }))}

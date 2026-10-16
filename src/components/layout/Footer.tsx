@@ -5,8 +5,8 @@ export function Footer() {
   return (
     <footer className="border-t bg-secondary/40 mt-auto">
       <div className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+          <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 font-extrabold text-lg mb-3">
               <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary to-violet-600 flex items-center justify-center">
                 <Briefcase className="h-3.5 w-3.5 text-white" />

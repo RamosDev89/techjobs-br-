@@ -142,22 +142,22 @@ export default function DashboardVagasPage() {
         <div className="space-y-3">
           {vagas.map((vaga) => (
             <Card key={vaga.id}>
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{vaga.titulo}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge variant={vaga.ativa ? "success" : "secondary"}>
-                      {vaga.ativa ? "Ativa" : "Inativa"}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">{vaga.modalidade}</span>
-                    <span className="text-xs text-muted-foreground">·</span>
-                    <span className="text-xs text-muted-foreground">{timeAgo(vaga.criadaEm)}</span>
-                    <span className="text-xs text-muted-foreground">·</span>
-                    <span className="text-xs text-muted-foreground">{vaga.visualizacoes} views</span>
+              <CardContent className="p-4">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{vaga.titulo}</p>
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-1">
+                      <Badge variant={vaga.ativa ? "success" : "secondary"}>
+                        {vaga.ativa ? "Ativa" : "Inativa"}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">{vaga.modalidade}</span>
+                      <span className="text-xs text-muted-foreground">·</span>
+                      <span className="text-xs text-muted-foreground">{timeAgo(vaga.criadaEm)}</span>
+                      <span className="hidden sm:inline text-xs text-muted-foreground">·</span>
+                      <span className="hidden sm:inline text-xs text-muted-foreground">{vaga.visualizacoes} views</span>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon" onClick={() => toggleAtiva(vaga)} title={vaga.ativa ? "Desativar" : "Ativar"}>
+                  <Button variant="ghost" size="icon" className="shrink-0" onClick={() => toggleAtiva(vaga)} title={vaga.ativa ? "Desativar" : "Ativar"}>
                     {vaga.ativa ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
                 </div>
@@ -168,7 +168,7 @@ export default function DashboardVagasPage() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" onClose={() => setDialogOpen(false)}>
+        <DialogContent className="sm:max-w-2xl" onClose={() => setDialogOpen(false)}>
           <DialogHeader>
             <DialogTitle>Publicar nova vaga</DialogTitle>
           </DialogHeader>
@@ -179,7 +179,7 @@ export default function DashboardVagasPage() {
               <Input placeholder="Ex: Desenvolvedor React Sênior" value={form.titulo} onChange={set("titulo")} required />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-sm font-medium mb-1 block">Cargo *</label>
                 <Select value={form.cargo} onChange={set("cargo")}>
@@ -210,7 +210,7 @@ export default function DashboardVagasPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-sm font-medium mb-1 block">Modalidade *</label>
                 <Select value={form.modalidade} onChange={set("modalidade")}>
@@ -231,7 +231,7 @@ export default function DashboardVagasPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="text-sm font-medium mb-1 block">Estado</label>
                 <Input placeholder="SP" value={form.estado} onChange={set("estado")} />
@@ -246,7 +246,7 @@ export default function DashboardVagasPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-sm font-medium mb-1 block">Salário mín. (BRL)</label>
                 <Input type="number" placeholder="8000" value={form.salarioMin} onChange={set("salarioMin")} />
